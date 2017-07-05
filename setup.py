@@ -50,7 +50,7 @@ setup(
     ],
     install_requires=[],
     long_description=long_description,
-    name="stream-to-logger",
+    name="streamtologger",
     version="2017.1",
     package_dir={"": "src/main/python"},
     packages=["streamtologger"]
