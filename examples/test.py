@@ -4,9 +4,6 @@
 """A simple example of how to redirect stdout/stderr to a file (in addition to printing to the screen)."""
 
 
-import logging
-import sys
-
 import streamtologger
 
 
