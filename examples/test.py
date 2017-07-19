@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""A simple example of how to redirect stdout."""
+"""A simple example of how to redirect stdout/stderr to a file (in addition to printing to the screen)."""
 
 
 import logging
@@ -41,28 +41,13 @@ __email__ = "mail@paho.at"
 __status__ = "Production"
 
 
-# create the logger that is used in this example
-root_logger = logging.getLogger()
-root_logger.setLevel(logging.INFO)
+# save stdout/stderr to the file "./out.log" (in addition to the usual printing)
+streamtologger.redirect()
 
-# setup logging to console
-console_handler = logging.StreamHandler(stream=sys.stdout)
-console_handler.terminator = ""
-root_logger.addHandler(console_handler)
-
-# setup logging to file
-file_handler = logging.FileHandler("stdout.log")
-file_handler.terminator = ""
-root_logger.addHandler(file_handler)
-
-# redirect stdout/stderr to the logger
-sys.stdout = streamtologger.LoggerAdapter(root_logger)
-sys.stderr = streamtologger.LoggerAdapter(root_logger, log_level=logging.ERROR)
-
-# a few prints
+# a few test prints
 print("line 1")
-print("line 2.1", end="")
-print(" line 2.2")
-print("line 3")
+print("line 2\nline 3.1", end="")
+print(" line 3.2")
+print("line 4")
 
-# have a look at the file stdout.log!!!
+# have a look at the file ./out.log!!!
