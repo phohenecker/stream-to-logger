@@ -66,7 +66,7 @@ class LoggerAdapter(object):
 
         # determine whether to add a final "\n"
         # this is important, e.g., if we redirect stdout to a logger, and print(..., end="") is invoked
-        final_new_line = len(lines) == 1 and len(buffer) > 0 and buffer[-1] == "\n"
+        final_new_line = len(buffer) > 0 and buffer[-1] == "\n"
 
         # forward provided buffer to the logger
         for index, line in enumerate(lines, start=1):
