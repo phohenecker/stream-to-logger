@@ -45,13 +45,13 @@ long_description = open("README.md").read()
 setup(
     author="Patrick Hohenecker",
     author_email="mail@paho.at",
-    classifiers=[
-            "Programming Language :: Python :: 3"
-    ],
+    classifiers=["Programming Language :: Python :: 3"],
+    description="A package for redirecting stdout/stderr to a file.",
     install_requires=[],
     long_description=long_description,
     name="streamtologger",
-    version="2017.1",
     package_dir={"": "src/main/python"},
-    packages=["streamtologger"]
+    packages=["streamtologger"],
+    url="https://github.com/phohenecker/stream-to-logger",
+    version="2017.1"
 )
