@@ -41,7 +41,14 @@ __email__ = "mail@paho.at"
 __status__ = "Production"
 
 
-def redirect(target: typing.Union[logging.Logger, str]="out.log", print_to_screen: bool=True) -> None:
+_is_redirected = False
+"""bool: Stores whether :func:`redirect` has been invoked."""
+
+
+def redirect(
+        target: typing.Union[logging.Logger, str]="out.log",
+        print_to_screen: bool=True
+) -> None:
     """Redirects stdout/stderr to the specified target.
 
     Args:
@@ -53,7 +60,19 @@ def redirect(target: typing.Union[logging.Logger, str]="out.log", print_to_scree
         print_to_screen (bool, optional): Indicates whether stdout and stderr should be printed to the console in
             addition to writing them to a file. This arg is ``True`` by default, and is ignored if ``target`` is an
             instance of `logging.Logger`.
+
+    Raises:
+        ValueError: If `redirect` has been invoked before.
     """
+    global _is_redirected
+
+    # check whether redirect has been invoked before
+    if _is_redirected:
+        raise ValueError("The function <redirect> has been invoked already!")
+
+    # store that redirect has been invoked
+    _is_redirected = True
+
     # if the provided target is a logger, then redirect stdout/stderr to it
     if isinstance(target, logging.Logger):
         # redirect stdout/stderr to the logger
