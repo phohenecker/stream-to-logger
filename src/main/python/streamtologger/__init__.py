@@ -47,7 +47,8 @@ _is_redirected = False
 
 def redirect(
         target: typing.Union[logging.Logger, str]="out.log",
-        print_to_screen: bool=True
+        print_to_screen: bool=True,
+        append: bool=True
 ) -> None:
     """Redirects stdout/stderr to the specified target.
 
@@ -59,6 +60,9 @@ def redirect(
             redirected to it.
         print_to_screen (bool, optional): Indicates whether stdout and stderr should be printed to the console in
             addition to writing them to a file. This arg is ``True`` by default, and is ignored if ``target`` is an
+            instance of `logging.Logger`.
+        append (bool, optional): If the target log file exists already, then ``append`` indicates whether to append to
+            it or delete it and create a new file. This arg is ``True`` by default, and is ignored if ``target`` is an
             instance of `logging.Logger`.
 
     Raises:
@@ -91,7 +95,7 @@ def redirect(
             root_logger.addHandler(console_handler)
 
         # setup logging to file
-        file_handler = logging.FileHandler(target)
+        file_handler = logging.FileHandler(target, mode=("a" if append else "w"))
         file_handler.terminator = ""
         root_logger.addHandler(file_handler)
 
