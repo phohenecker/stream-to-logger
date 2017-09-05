@@ -68,12 +68,12 @@ class InitTest(unittest.TestCase):
             f.write("Veni, vidi, vici!\n")
             f.write("Alea iacta est!")
 
-        streamtologger.redirect(target=log_file, append=False, print_to_screen=False)
+        streamtologger.redirect(target=log_file, print_to_screen=False, append=False, header_format="test> ")
         print("line 1")
         print("line 2.1", end="")
         print(", line 2.2")
 
-        self.assertEqual(["line 1", "line 2.1, line 2.2"], self._read_file(log_file))
+        self.assertEqual(["test> line 1", "test> line 2.1, line 2.2"], self._read_file(log_file))
 
         # delete created log file again
         os.remove(log_file)

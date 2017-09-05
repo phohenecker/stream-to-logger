@@ -48,7 +48,8 @@ _is_redirected = False
 def redirect(
         target: typing.Union[logging.Logger, str]="out.log",
         print_to_screen: bool=True,
-        append: bool=True
+        append: bool=True,
+        header_format: str=None
 ) -> None:
     """Redirects stdout/stderr to the specified target.
 
@@ -64,7 +65,8 @@ def redirect(
         append (bool, optional): If the target log file exists already, then ``append`` indicates whether to append to
             it or delete it and create a new file. This arg is ``True`` by default, and is ignored if ``target`` is an
             instance of `logging.Logger`.
-
+        header_format (str, optional): If the ``target`` is not a `logging.Logger`, then this specifies a line header for
+            the created :class:`LoggerAdapter` to use. For more details, confer :attr:`LoggerAdapter.start_format`.
     Raises:
         ValueError: If `redirect` has been invoked before.
     """
@@ -100,5 +102,5 @@ def redirect(
         root_logger.addHandler(file_handler)
 
         # redirect stdout/stderr to the logger
-        sys.stdout = LoggerAdapter(root_logger)
-        sys.stderr = LoggerAdapter(root_logger, log_level=logging.ERROR)
+        sys.stdout = LoggerAdapter(root_logger, log_level=logging.INFO, header_format=header_format)
+        sys.stderr = LoggerAdapter(root_logger, log_level=logging.ERROR, header_format=header_format)
