@@ -39,12 +39,15 @@ __status__ = "Production"
 
 
 # save stdout/stderr to the file "./out.log" (in addition to the usual printing)
-streamtologger.redirect()
+streamtologger.redirect(target="./out.log", append=False, header_format="[{timestamp:%Y-%m-%d %H:%M:%S} - {level:5}] ")
 
 # a few test prints
 print("line 1")
 print("line 2\nline 3.1", end="")
 print(" line 3.2")
 print("line 4")
+
+# the next line causes an error, which is logged as well
+x = "not a number" / 2
 
 # have a look at the file ./out.log!!!
