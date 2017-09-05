@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
+import datetime
 import logging
 
 
@@ -43,22 +44,33 @@ class LoggerAdapter(object):
         logger (logging.Logger): The logger object that is used to produce output. To support correct logging of any
             kind of output, the provided logger should use an empty terminator, i.e., ``logger.terminator = ""``.
             Furthermore, formatting is not supported.
+        header_format (str): This is an optional format string that specifies a line header that is prepended to each
+            line. ``start_format`` is supposed to specify a format for new-style formatting with `String.Formatter`
+            (which is used whenever ``"some string".format(...)`` is invoked), and may use the named elements ``level``,
+            for the logging level (as string), and ``timestamp``, for a current timestamp. A valid ``start_format``
+            could look like this:
 
-    Note:
-        This class is based on the code provided on
-        `https://www.electricmonk.nl/log/2011/08/14/redirect-stdout-and-stderr-to-a-logger-in-python/`_
+                start_format = "[{timestamp:%Y-%m-%d %H:%M:%S} - {level:8}] "
     """
 
-    def __init__(self, logger: logging.Logger, log_level: int=logging.INFO):
+    def __init__(
+            self,
+            logger: logging.Logger,
+            log_level: int=logging.INFO,
+            header_format: str=None
+    ):
         """Creates a new instance of ``LoggerAdapter`` that uses the provided logger and logging level.
 
         Args:
             logger (logging.Logger): Specifies the attribute :attr:`logger`.
             log_level (int, optional): Specifies the attribute :attr:`log_level`, which is set to `logging.INFO` by
                 default.
+            header_format (str, optional): Specifies the attribute :attr:`header_format`.
         """
+        self._new_line = True  # indicates whether the next write starts a new line
         self.logger = logger
         self.log_level = log_level
+        self.header_format = header_format
 
     def write(self, buffer) -> None:
         # split buffer into lines
@@ -70,6 +82,17 @@ class LoggerAdapter(object):
 
         # forward provided buffer to the logger
         for index, line in enumerate(lines, start=1):
+
+            # print line header (if specified)
+            if self.header_format is not None and (index > 1 or self._new_line):
+                self.logger.log(
+                        self.log_level,
+                        self.header_format.format(
+                                level=logging.getLevelName(self.log_level),
+                                timestamp=datetime.datetime.now()
+                        )
+                )
+
             # log current line
             self.logger.log(self.log_level, line)
 
@@ -77,6 +100,9 @@ class LoggerAdapter(object):
             last_line = index == len(lines)
             if (not last_line) or (last_line and final_new_line):
                 self.logger.log(self.log_level, "\n")
+
+        # store whether the next write starts a new line
+        self._new_line = final_new_line
 
     def flush(self) -> None:
         """This method does not implement any functionality, but is only present in order to prevent errors."""
