@@ -60,6 +60,7 @@ setup(
         name="streamtologger",
         package_dir={"": "src/main/python"},
         packages=["streamtologger"],
+        python_requires=">=3",
         url="https://github.com/phohenecker/stream-to-logger",
         version="2017.1"
 )
